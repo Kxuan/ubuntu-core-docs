@@ -1,5 +1,7 @@
 import datetime
 import ast
+import os
+import yaml
 
 # Configuration for the Sphinx documentation builder.
 # All configuration specific to your project should be done in this file.
@@ -236,6 +238,8 @@ extensions = [
     "canonical_sphinx",
     "sphinxcontrib.cairosvgconverter",
     "sphinx_last_updated_by_git",
+    "sphinx.ext.intersphinx",
+    "sphinx_sitemap",
     "sphinxext.rediraffe",
 ]
 
@@ -303,3 +307,24 @@ rst_prolog = """
 
 if "discourse_prefix" not in html_context and "discourse" in html_context:
     html_context["discourse_prefix"] = html_context["discourse"] + "/t/"
+
+# Workaround for substitutions.yaml
+
+if os.path.exists('./reuse/substitutions.yaml'):
+    with open('./reuse/substitutions.yaml', 'r') as fd:
+        myst_substitutions = yaml.safe_load(fd.read())
+
+# Depth of heading anchors generated
+
+myst_heading_anchors = 3
+
+# Add configuration for intersphinx mapping
+
+## Sitemap configuration
+
+html_baseurl = 'https://documentation.ubuntu.com/core/'
+sitemap_url_scheme = "{link}"
+
+intersphinx_mapping = {
+    'starter-pack': ('https://canonical-example-product-documentation.readthedocs-hosted.com/en/latest', None)
+}
